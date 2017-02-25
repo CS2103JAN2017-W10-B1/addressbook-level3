@@ -27,6 +27,11 @@ public class Parser {
                     + " (?<isAddressPrivate>p?)a/(?<address>[^/]+)"
                     + "(?<tagArguments>(?: t/[^/]+)*)"); // variable number of tags
 
+	private static final Pattern UPDATE_DATA_ARGS_FORMAT = // '/' forward slashes are reserved for delimiter prefixes
+            Pattern.compile("(?<name>[^/]+)"
+                    + " (?<updateWhich>[^/]+)"
+                    + " (?<isPrivate>p?)e/(?<updateString>[^/]+)"); // variable number of tags
+
 
     /**
      * Signals that the user input could not be parsed.
@@ -276,25 +281,29 @@ public class Parser {
      * @return the prepared command
      */
     private Command prepareUpdate(String args) {
-    	final Matcher matcher = PERSON_DATA_ARGS_FORMAT.matcher(args.trim());
+    	final Matcher matcher = UPDATE_DATA_ARGS_FORMAT.matcher(args.trim());
         // Validate arg string format
         if (!matcher.matches()) {
             return new IncorrectCommand(String.format(MESSAGE_INVALID_COMMAND_FORMAT, UpdateCommand.MESSAGE_USAGE));
         }
         // keywords delimited by whitespace
-        final String[] keywords = matcher.group("keywords").split("\\s+");
+        final Matcher keywordMatcher = KEYWORDS_ARGS_FORMAT.matcher(matcher.group("name"));
+        final String[] keywords = keywordMatcher.group("keywords").split("\\s+");
         final Set<String> keywordSet = new HashSet<>(Arrays.asList(keywords));
-        try {
-        	updateString = matcher.group("email");
+        String updateWhichString = matcher.group("updateWhich");
+        updateString = matcher.group("updateString");
+        if (updateWhichString == "EMAIL") {
         	updateWhich = UpdateWhich.EMAIL;
-        } catch (Exception ive) {
-        	updateString = matcher.group("phone");
+        }
+        else {
         	updateWhich = UpdateWhich.PHONE;
         }
+        boolean isPrivate = isPrivatePrefixPresent(matcher.group("isPrivate"));
         return new UpdateCommand(
         		keywordSet,
         		updateWhich,
-        		updateString);
+        		updateString,
+        		isPrivate);
     }
 
 }
