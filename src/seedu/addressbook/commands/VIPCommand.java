@@ -13,7 +13,7 @@ public class VIPCommand extends Command{
 	
 	 public static final String COMMAND_WORD = "vip";
 
-	    public static final String MESSAGE_USAGE = COMMAND_WORD + ":\n" + "Adds a VIP tag to the person identified by the index number used in the last person listing.. "
+	    public static final String MESSAGE_USAGE = COMMAND_WORD + ":\n" + "Adds a VIP tag to the person identified by the index number used in the last person listing..\n\t"
 	            + "Parameters: INDEX\n\t"
 	            + "Example: " + COMMAND_WORD + " 1";
 
