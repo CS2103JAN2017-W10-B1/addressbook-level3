@@ -19,6 +19,7 @@ public interface ReadOnlyPerson {
      * changes on the returned list will not affect the person's internal tags.
      */
     UniqueTagList getTags();
+    void setTags(UniqueTagList replacement);
 
     /**
      * Returns true if the values inside this object is same as those of the other (Note: interfaces cannot override .equals)
