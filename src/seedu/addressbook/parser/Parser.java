@@ -32,7 +32,9 @@ public class Parser {
                     + " (?<updateWhich>[^/]+)"
                     + " (?<isPrivate>p?)e/(?<updateString>[^/]+)"); // variable number of tags
 
-
+	private static final Pattern REPRIORITIZE_ARGS_FORMAT = 
+	        Pattern.compile("(?<targerIndex>[^/]+)"
+                    + " (?<newLevel>[^/]+)");
     /**
      * Signals that the user input could not be parsed.
      */
@@ -81,6 +83,9 @@ public class Parser {
 
             case ListCommand.COMMAND_WORD:
                 return new ListCommand();
+                
+            case SetPriorityCommand.COMMAND_WORD:
+                return prepareSetPriority(arguments);
 
             case ViewCommand.COMMAND_WORD:
                 return prepareView(arguments);
@@ -253,6 +258,23 @@ public class Parser {
         }
         return Integer.parseInt(matcher.group("targetIndex"));
     }
+    
+    /**
+     * Parse the given argument string as a integer array
+     * 
+     * @param args arguments string to parse as set prioritize string
+     * @return the parsed index and level
+     * @throws ParseException
+     */
+    private int[] parseArgsAsSetPriorization(String args) throws ParseException {
+        final Matcher matcher = REPRIORITIZE_ARGS_FORMAT.matcher(args.trim());
+        if (!matcher.matches()) {
+            throw new ParseException("Could not find index number to parse");
+        }
+        int index = Integer.parseInt(matcher.group("targetIndex"));
+        int level = Integer.parseInt(matcher.group("newLevel"));
+        return new int[]{index, level};
+    }
 
 
     /**
@@ -274,6 +296,27 @@ public class Parser {
         return new FindCommand(keywordSet);
     }
 
+    private Command prepareSetPriority(String args) {
+        final Matcher matcher = REPRIORITIZE_ARGS_FORMAT.matcher(args.trim());
+        // Validate arg string format
+        if (!matcher.matches()) {
+            return new IncorrectCommand(String.format(MESSAGE_INVALID_COMMAND_FORMAT, UpdateCommand.MESSAGE_USAGE));
+        }
+        int targetIndex;
+        try {
+            targetIndex = parseArgsAsSetPriorization(args)[0];
+        } catch (ParseException e) {
+            targetIndex = 0;
+        }
+        int level;
+        try {
+            level = parseArgsAsSetPriorization(args)[1];
+        } catch (ParseException e) {
+            level = 0;
+        }
+        return new SetPriorityCommand(targetIndex, level);
+    }
+    
     /**
      * Parses arguments in the context of the update person command.
      *
