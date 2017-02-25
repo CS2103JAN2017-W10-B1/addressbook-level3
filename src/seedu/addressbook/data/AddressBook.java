@@ -134,14 +134,5 @@ public class AddressBook {
         return Objects.hash(allPersons, allTags);
     }
 
-    /**
-     * Repriorize the person with new priorization level
-     * 
-     * @param target
-     * @param newLevel
-     */
-    public void repriorizePerson(ReadOnlyPerson target, int newLevel) {
-        // TODO Auto-generated method stub
-        
-    }
+
 }

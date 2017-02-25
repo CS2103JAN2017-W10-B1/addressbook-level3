@@ -64,6 +64,14 @@ public class Person implements ReadOnlyPerson {
         return priority;
     }
 
+    public void setEmail(Email email) {
+    	this.email = email;
+    }
+
+    public void setPhone(Phone phone) {
+    	this.phone = phone;
+    }
+
     @Override
     public UniqueTagList getTags() {
         return new UniqueTagList(tags);

@@ -1,6 +1,7 @@
 package seedu.addressbook.commands;
 
 import seedu.addressbook.common.Messages;
+import seedu.addressbook.data.person.Person;
 import seedu.addressbook.data.person.ReadOnlyPerson;
 import seedu.addressbook.data.person.UniquePersonList.PersonNotFoundException;
 
@@ -25,7 +26,7 @@ public class SetPriorityCommand extends Command{
     @Override
     public CommandResult execute() {
         try {
-            final ReadOnlyPerson target = getTargetPerson();
+            final Person target = (Person) getTargetPerson();
             addressBook.repriorizePerson(target, this.newLevel);
             return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS, target));
 
