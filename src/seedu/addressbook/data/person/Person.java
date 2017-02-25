@@ -76,6 +76,10 @@ public class Person implements ReadOnlyPerson {
         tags.setTags(replacement);
     }
 
+    public void setPriority(Priority newPriority){
+        priority = newPriority;
+    }
+    
     @Override
     public boolean equals(Object other) {
         return other == this // short circuit if same object
