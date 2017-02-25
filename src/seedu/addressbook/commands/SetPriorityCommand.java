@@ -1,14 +1,16 @@
 package seedu.addressbook.commands;
 
 import seedu.addressbook.common.Messages;
+import seedu.addressbook.data.exception.IllegalValueException;
 import seedu.addressbook.data.person.Person;
 import seedu.addressbook.data.person.ReadOnlyPerson;
 import seedu.addressbook.data.person.UniquePersonList.PersonNotFoundException;
 
 public class SetPriorityCommand extends Command{
     
-    public static final String COMMAND_WORD = "repriorize";
-
+    public static final String COMMAND_WORD = "reprioritize";
+    
+    public static final String MESSAGE_INVALID_PRIORITIZE_LEVEL = "The prioritize level should between 1 to 3.";
     public static final String MESSAGE_USAGE = COMMAND_WORD + ":\n" 
             + "Repriorize the person identified by the index number used in the last person listing.\n\t"
             + "Parameters: INDEX NEW_PRIORITIZE_LEVEL\n\t"
@@ -26,12 +28,16 @@ public class SetPriorityCommand extends Command{
     @Override
     public CommandResult execute() {
         try {
-            final Person target = (Person) getTargetPerson();
-            addressBook.repriorizePerson(target, this.newLevel);
+            final ReadOnlyPerson target = getTargetPerson();
+            addressBook.repriorize(target, this.newLevel);
             return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS, target));
 
         } catch (IndexOutOfBoundsException ie) {
             return new CommandResult(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        } catch (IllegalValueException e) {
+            return new CommandResult(MESSAGE_INVALID_PRIORITIZE_LEVEL);
         }
     }
+    
+    
 }

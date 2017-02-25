@@ -1,5 +1,6 @@
 package seedu.addressbook.data.person;
 
+import seedu.addressbook.data.exception.IllegalValueException;
 import seedu.addressbook.data.tag.Tag;
 import seedu.addressbook.data.tag.UniqueTagList;
 
@@ -14,6 +15,8 @@ public interface ReadOnlyPerson {
     Email getEmail();
     Address getAddress();
     Priority getPriority();
+    
+    void setPriority(int level) throws IllegalValueException;
 
     /**
      * The returned TagList is a deep copy of the internal TagList,

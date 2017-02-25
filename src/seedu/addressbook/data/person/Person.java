@@ -84,8 +84,8 @@ public class Person implements ReadOnlyPerson {
         tags.setTags(replacement);
     }
 
-    public void setPriority(Priority newPriority){
-        priority = newPriority;
+    public void setPriority(int newPriorityLevel) throws IllegalValueException{
+        priority = new Priority(newPriorityLevel);
     }
     
     @Override
